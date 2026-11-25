@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ImvuraCast – plan your farm work with a 5-day weather forecast." />
+  <title>ImvuraCast – Farm Weather Planner</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🌱%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: linear-gradient(180deg, #eef7f1 0%, #f6f4ef 40%, #fdf6ec 100%); }
+    .topbar { background: linear-gradient(90deg, #1f5136 0%, #2f7d4f 55%, #2f6fb3 100%); box-shadow: 0 3px 12px rgba(31, 81, 54, 0.35); }
+    .brand h1 { color: #ffe08a; }
+    .tagline { color: #d7f5e3; }
+    .server-badge { background: #ffe08a; color: #1f5136; font-weight: 700; }
+    .search-card { border-top: 6px solid #2f7d4f; background: linear-gradient(135deg, #ffffff 0%, #f0faf4 100%); }
+    .search-card label { color: #1f5136; font-size: 1.1rem; }
+    .search-row input:focus { border-color: #2f6fb3; background: #f4f9ff; }
+    #searchBtn { background: #e07b24; }
+    #searchBtn:hover { background: #b85f14; }
+    .place-header h2 { color: #1f5136; }
+    .controls { background: #fff8e6; border-left: 6px solid #e0a624; }
+    .controls label { color: #7a5536; font-weight: 600; }
+    .chart-card { background: linear-gradient(135deg, #f4f9ff 0%, #ffffff 100%); border-left: 6px solid #2f6fb3; }
+    .chart-card h3 { color: #2f6fb3; }
+    .day-card.good { background: linear-gradient(180deg, #f0faf4 0%, #ffffff 45%); }
+    .day-card.okay { background: linear-gradient(180deg, #fff6ec 0%, #ffffff 45%); }
+    .day-card.poor { background: linear-gradient(180deg, #fdf0ef 0%, #ffffff 45%); }
+    .day-top h3 { color: #1f5136; }
+    .toggle-hours { color: #2f6fb3; border-color: #cfe1f5; }
+    .toggle-hours:hover { background: #eaf3fd; }
+    .hours th { background: #eaf3fd; color: #2f6fb3; }
+    .footer { background: #1f5136; color: #d7f5e3; border-top: none; }
+    .footer a { color: #ffe08a; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">🌱</span>
+      <div>
+        <h1>ImvuraCast</h1>
+        <p class="tagline">Know the rain. Plan the farm.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="unitToggle" class="pill" type="button" aria-label="Switch temperature unit">°C</button>
+      <span id="serverBadge" class="server-badge" title="The server that answered your last request">server: …</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="search-card">
+      <form id="searchForm" autocomplete="off" novalidate>
+        <label for="placeInput">Where is your farm?</label>
+        <div class="search-row">
+          <input id="placeInput" type="text" maxlength="60" placeholder="e.g. Musanze, Huye, Nyagatare" required />
+          <button type="submit" id="searchBtn">Search</button>
+        </div>
+        <p id="formHint" class="hint">Type a town or city, then choose the right one from the list.</p>
+      </form>
+
+      <ul id="placeResults" class="place-results" hidden></ul>
+
+      <div id="savedWrap" class="saved" hidden>
+        <span class="saved-title">Saved places:</span>
+        <div id="savedList" class="saved-list"></div>
+      </div>
+    </section>
+
+    <div id="statusBox" class="status" role="status" aria-live="polite" hidden></div>
+
+    <section id="results" hidden>
+      <div class="place-header">
+        <div>
+          <h2 id="placeTitle"></h2>
+          <p id="placeMeta" class="meta"></p>
+        </div>
+        <button id="saveBtn" class="pill" type="button">☆ Save place</button>
+      </div>
+
+      <div class="controls">
+        <label>Sort by <select id="sortSelect"><option value="date">Date</option><option value="score">Best field day</option><option value="rainDesc">Most rain</option><option value="rainAsc">Least rain</option><option value="tempDesc">Hottest</option><option value="windAsc">Calmest wind</option></select></label>
+        <label>Good for <select id="activitySelect"><option value="all">Any activity</option><option value="planting">Planting</option><option value="spraying">Spraying</option><option value="harvesting">Harvesting / drying</option><option value="irrigation">Needs irrigation</option></select></label>
+        <label>Weather <select id="weatherSelect"><option value="all">All days</option><option value="dry">Dry days (&lt; 1 mm)</option><option value="rainy">Rainy days (≥ 1 mm)</option></select></label>
+      </div>
+
+      <div class="chart-card">
+        <h3>Rain and temperature at a glance</h3>
+        <div id="chart" class="chart"></div>
+        <p class="legend"><span class="key key-rain"></span> Rain (mm) <span class="key key-temp"></span> Max temperature</p>
+      </div>
+
+      <p id="countText" class="meta"></p>
+      <div id="dayGrid" class="day-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Weather data by <a href="https://openweathermap.org/" target="_blank" rel="noopener">OpenWeatherMap</a>.
+      Advice is a general guide – always use your own judgement in the field.</p>
+    <p>Made by Rebecca Umuragwa Benegusenga</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

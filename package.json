@@ -1,0 +1,20 @@
+{
+  "name": "imvuracast",
+  "version": "1.0.0",
+  "description": "ImvuraCast - a 5-day farm weather planner that tells farmers which days are good for planting, spraying, harvesting and irrigating.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Rebecca Umuragwa Benegusenga",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
