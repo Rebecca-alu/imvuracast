@@ -94,3 +94,4 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   .controls select { width: 100%; }
   .place-header { flex-direction: column; align-items: flex-start; }
 }
+[hidden] { display: none !important; }
