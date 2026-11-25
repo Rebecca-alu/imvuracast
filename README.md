@@ -3,7 +3,7 @@
 ImvuraCast is a web app that helps farmers plan their work using the weather. "Imvura" means rain in Kinyarwanda.
 You search for a town and the app shows the next 5 days of weather, with advice on the whether each day is good for planting, spraying, harvesting or watering crops.
 
-**Live app:**                                   **Demo video:**                                       **Author:** Rebecca Umuragwa Benegusenga
+**Live app:** http://imvuracast.rebecca-alu.tech                                  **Demo video:**                                       **Author:** Rebecca Umuragwa Benegusenga
 
 ## Why I built it
 
